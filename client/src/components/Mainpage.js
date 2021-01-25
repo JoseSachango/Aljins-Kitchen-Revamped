@@ -1,11 +1,12 @@
 import React, {useRef,useState,useEffect} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import { makeStyles } from '@material-ui/core/styles';
-import JSONPretty from "react-json-pretty";
+// import JSONPretty from "react-json-pretty";
 import axios from "axios";
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import "./Mainpage.css";
 //import classes from "*.module.css";
 import TextField from '@material-ui/core/TextField';
 import {
@@ -91,11 +92,13 @@ const Mainpage = () =>{
 
     const classes = useStyles()
 
+    // const [deleteItem, setDeleteItem] = useState({});
     const [list, setList] = useState([]);
-    const [count,setCount] = useState(0)
-    const [userData,setUserData] = useState({})
-    const [returnedPostData,setReturnedPostData] = useState({})
-    const [recipes,setRecipes] = useState([])
+    const [count,setCount] = useState(0);
+    const [userData,setUserData] = useState({});
+    const [returnedPostData,setReturnedPostData] = useState({});
+    const [recipes,setRecipes] = useState([]);
+    
     //----
     /*
     function filterRecipes(arg){
@@ -129,7 +132,7 @@ const Mainpage = () =>{
     //---
 
 
-    const [ingredients,setIngredients] = useState([])
+    // const [ingredients,setIngredients] = useState([])
     const inputRef = useRef();
     const newlist = list.map(item=>item)
     const iduser = userData.userId
@@ -143,7 +146,9 @@ const Mainpage = () =>{
         setList([...list, inputRef.current.value]) //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
         console.log("This is the current list: ",list)
         console.log("This is the current value in the input field: ",inputRef.current.value)
+        inputRef.current.value = '';
     }
+
 
     //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
 
@@ -167,13 +172,25 @@ const Mainpage = () =>{
             })
 
         }
-        
-
+    
+    
         postRequest()
 
         //API call here (post request)
         // return axios.post("/api/pantry",data)
     },[count])
+
+    // useEffect(() => {
+    //     function deleteRequest(id){
+    //         axios.delete("/api/pantry" + id, {userId:iduser, ingreadients:newList}).then(result=>{
+    //             setDeleteItem({result})
+    //             console.log("This is the data we get back from making a delete request: ",result)
+    //         }).catch(err=>{
+    //             console.log("There was an error with the delete request: ",err)
+    //         })
+    //     }
+    //     deleteRequest()
+    // },[])
 
     console.log("Use effect was activated. The count is: ",count)
     console.log("This is the current userData: ",userData)
@@ -206,6 +223,14 @@ const Mainpage = () =>{
 
     }
 
+    function deleteItem(id) {
+        
+        console.log("This is an item number", id);
+    }
+
+    
+
+
 
 
     return (
@@ -218,12 +243,18 @@ const Mainpage = () =>{
         
                     <Paper className={classes.paper}>
 
-                        <form  className={classes.TextField} noValidate autoComplete="off" onSubmit={handleSubmit}>
+                        <form  className={classes.TextField} noValidate autoComplete="on" onSubmit={handleSubmit}>
                             <TextField inputProps={{ref: inputRef}}  xs={12} sm={2} id="standard-basic" label="Ingredients" />
+                            {/* <View
+                                style= {{ flexDirection: 'row'}}
+                            >
+                                <Text style={{ flexShrink: 1 }}>
+                                </Text>
+                            </View> */}
                         </form>
 
-                        <Button variant="contained" color="primary" onClick={sendData}>
-                           Finish List
+                        <Button variant="contained" color="primary" onClick={sendData} >
+                            Finish List
                         </Button>
 
 
@@ -240,7 +271,7 @@ const Mainpage = () =>{
                                 />
                                 <ListItemSecondaryAction>
                                 <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon />
+                                    <DeleteIcon onClick={deleteItem(i)} />
                                 </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>
