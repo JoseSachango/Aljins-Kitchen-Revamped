@@ -12,7 +12,14 @@ module.exports = {
             .then(dbModel => dbModel.remove())
             .then(dbModel => response.json(dbModel))
             .catch(err => res.status(422).json(err));
-    }
+    },
+
+    findById: function(req, res) {
+        Schemas.Pantry
+            .find({userId:req.params.id})
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
+        }
 }
 
 

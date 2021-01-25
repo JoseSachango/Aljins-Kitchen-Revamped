@@ -10,6 +10,7 @@ router.route("/")
     .delete(pantryController.remove);
     
 
-
+router.route("/:id")
+    .get(pantryController.findById)
 
 module.exports = router
