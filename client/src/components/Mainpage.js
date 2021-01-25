@@ -181,7 +181,7 @@ const Mainpage = () =>{
 
     const sendData = () =>{
 
-        console.log("These are the filtered recipes: ",newRecipes)
+        //console.log("These are the filtered recipes: ",newRecipes)
         //***********I'm not making an api call inside the useEffect hook. How will this be a problem later?*****************
        axios.get("https://tasty.p.rapidapi.com/recipes/list?rapidapi-key=de347e5db0msha96abb0356a3c81p10f425jsn336bf5c8e455").then(response=>{
            
