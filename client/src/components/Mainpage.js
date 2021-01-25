@@ -125,7 +125,7 @@ const Mainpage = () => {
         //components.length===list.length && ___
         // nest one if condition inside of another
         filterRecipes(recipe)
-       
+
     })*/
 
     //---
@@ -143,6 +143,22 @@ const Mainpage = () => {
         axios.get("api/pantry/" = userId).then(result => setList (result.data.ingredients).catch(console.log))
     }
 
+    function pantryList() {
+        if (isAuthenticated) {
+            axios.get("/api/pantry/" + user.sub).then(result => {
+                setList(result.data[0].ingredients)
+            }).catch(console.log)
+        }
+
+    }
+
+
+    useEffect(() => {
+
+        pantryList()
+
+    }, [isAuthenticated])
+
     const handleSubmit = (event) => {
         event.preventDefault()
         setList([...list, inputRef.current.value]) //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
@@ -157,30 +173,30 @@ const Mainpage = () => {
 
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        function postRequest() {
+    function postRequest() {
 
-            console.log("Ths value of iduser is :", iduser)
+        console.log("Ths value of iduser is :", userData.userId)
 
-            axios.post("/api/pantry", { userId: iduser, ingredients: list }).then(result => {
+        axios.post("/api/pantry", { userId: user.sub, ingredients: list }).then(result => {
 
-                //if post request is successful make a axios get request to the tasty api here
+            //if post request is successful make a axios get request to the tasty api here
+            pantryList()
+            setReturnedPostData({ result })
+            console.log("This is the data we get back from making a post request: ", result)
+        }).catch(err => {
+            console.log("There was an error with the post request: ", err)
+        })
 
-                setReturnedPostData({ result })
-                console.log("This is the data we get back from making a post request: ", result)
-            }).catch(err => {
-                console.log("There was an error with the post request: ", err)
-            })
-
-        }
+    }
 
 
-        // postRequest()
 
-        //API call here (post request)
-        // return axios.post("/api/pantry",data)
-    }, [count])
+
+    //API call here (post request)
+    // return axios.post("/api/pantry",data)
+    // }, [count])
 
     console.log("Use effect was activated. The count is: ", count)
     console.log("This is the current userData: ", userData)
@@ -221,11 +237,10 @@ const Mainpage = () => {
 
 
 
-function deleteItem(id){
-    ListItem.deleteItem(id)
-        .then(res => )
-    console.log("this is delete btn", id)
-}
+    function deleteItem(id) {
+        deleteItem(id)
+        console.log("this is a delete btn", id)
+    }
 
 
 
@@ -243,7 +258,7 @@ function deleteItem(id){
                             <TextField inputProps={{ ref: inputRef }} xs={12} sm={2} id="standard-basic" label="Ingredients" />
                         </form>
 
-                        <Button variant="contained" color="primary" onClick={sendData} >
+                        <Button variant="contained" color="primary" onClick={postRequest} >
                             Finish List
                         </Button>
 
@@ -258,7 +273,7 @@ function deleteItem(id){
                                     </ListItemAvatar>
                                     <ListItemText
                                         primary={item}
-                                    
+
                                     />
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => deleteItem(i)}>
