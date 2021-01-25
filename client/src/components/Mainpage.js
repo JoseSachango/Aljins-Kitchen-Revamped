@@ -143,7 +143,9 @@ const Mainpage = () =>{
         setList([...list, inputRef.current.value]) //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
         console.log("This is the current list: ",list)
         console.log("This is the current value in the input field: ",inputRef.current.value)
+        inputRef.current.value = '';
     }
+
 
     //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
 
@@ -222,8 +224,8 @@ const Mainpage = () =>{
                             <TextField inputProps={{ref: inputRef}}  xs={12} sm={2} id="standard-basic" label="Ingredients" />
                         </form>
 
-                        <Button variant="contained" color="primary" onClick={sendData}>
-                           Finish List
+                        <Button variant="contained" color="primary" onClick={sendData} >
+                            Finish List
                         </Button>
 
 
