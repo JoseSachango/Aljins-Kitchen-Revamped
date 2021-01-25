@@ -96,7 +96,8 @@ const Mainpage = () =>{
     const [userData,setUserData] = useState({})
     const [returnedPostData,setReturnedPostData] = useState({})
     const [recipes,setRecipes] = useState([])
-
+    //----
+    /*
     function filterRecipes(arg){
         if(arg.sections[0].components.length===list.length){
             const ingredientsArray = []
@@ -123,7 +124,9 @@ const Mainpage = () =>{
         // nest one if condition inside of another
         filterRecipes(recipe)
        
-    })
+    })*/
+
+    //---
 
 
     const [ingredients,setIngredients] = useState([])
@@ -257,7 +260,7 @@ const Mainpage = () =>{
                             <GridListTile key="Subheader" cols={2} style={{ height: 'auto'}}>
                             <ListSubheader component="div">Recommended Recipes</ListSubheader>
                             </GridListTile>
-                            {newRecipes.map((recipe) => (
+                            {recipes.map((recipe) => (
                             <GridListTile key={recipe.thumbnail_url}>
                                 <img src={recipe.thumbnail_url} alt={recipe.name} />
                                 <GridListTileBar
