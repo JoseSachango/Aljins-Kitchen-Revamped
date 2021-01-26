@@ -4,23 +4,34 @@ const Schemas = require( "../models")
 
 module.exports = {
     create: function(request,response){
-        Schemas.Pantry.create(request.body).then(result=>response.json(result)).catch(err=>response.json(err))
+       Schemas.Pantry.create(request.body).then(result=>response.json(result)).catch(err=>response.json(err))
     },
-
-    remove: function(request, response) {
-        Schemas.Pantry.findById({ _id: request.params.id })
-            .then(dbModel => dbModel.remove())
-            .then(dbModel => response.json(dbModel))
-            .catch(err => res.status(422).json(err));
+    getOne: function(request,response) {
+        console.log("The getOne function is firing")
+        Schemas.Pantry.findOne(
+            {
+                userId: request.params.id
+            }
+        ).then(result=>{
+            response.json(result)
+        }).catch(err=>{
+            response.json(err)
+        })
     },
-
-    findById: function(request, response) {
-        Schemas.Pantry
-        //maybe req.body.value 
-            .find({userId:request.params.id})
-            .then(dbModel => response.json(dbModel))
-            .catch(err => response.status(422).json(err));
-        }
+    updateOne: function(request,response){
+        console.log("The put request has hit the backend")
+        Schemas.Pantry.findOneAndUpdate(
+            {
+                userId: request.params.id
+            },
+            {
+                $set: {ingredients: request.body.ingredients}
+            },
+           
+        ).then(result=>{
+            response.json(result)
+        }).catch(err=>{
+            response.json(err)
+        })
+    }
 }
-
-
