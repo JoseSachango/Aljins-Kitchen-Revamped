@@ -1,7 +1,9 @@
 const pantry = require("./pantry")
+const recipe = require("./recipe")
 
 
 
 module.exports = {
-    Pantry: pantry
+    Pantry: pantry,
+    Recipe: recipe
 }
