@@ -356,6 +356,7 @@ const Mainpage = () => {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
+                        style={{overflow: "hidden", textOverflow: "ellipsis", width: '11rem'}}
                         disableTypography
                         primary={
                           <Typography type="body2" style={{ flexShrink: 1 }}>
@@ -413,12 +414,12 @@ const Mainpage = () => {
                   <img src={recipe.thumbnail_url} alt={recipe.name} />
                   <GridListTileBar
                     title={recipe.name}
-                    subtitle={<span>by: {recipe.credits[0].name}</span>}
+                    subtitle={<span>by: {recipe.user_ratings && recipe.user_ratings.score}</span>}
                     actionIcon={
                       <IconButton
                         aria-label={`info about ${recipe.name}`}
                         className={classes.icon}
-                      >
+                      >{console.log(recipe.user_ratings)}
                         <AddIcon color="secondary" onClick={()=>setIndexValue([1,i,recipe.description,recipe.name,recipe.credits[0].name,recipe.thumbnail_url,recipe.instructions])} >
                           Ingredients
                         </AddIcon>
@@ -483,22 +484,17 @@ const Mainpage = () => {
                     <CardContent>
                       <Typography paragraph>Method:</Typography>
                       <Typography paragraph>
-                        {indexValue[6] && indexValue[6][0]}
-                        {indexValue[6] && indexValue[6][1]}
-                        {indexValue[6] && indexValue[6][2]}
+                        {indexValue[6] && indexValue[6][0].display_text}
                       </Typography>
                       <Typography paragraph>
-                        {indexValue[6] && indexValue[6][3]}
-                        {indexValue[6] && indexValue[6][4]}
-                        {indexValue[6] && indexValue[6][5]}
+                          blahhhhh
                       </Typography>
                       <Typography paragraph>
-                        {indexValue[6] && indexValue[6][6]}
-                        {indexValue[6] && indexValue[6][7]}
-                        {indexValue[6] && indexValue[6][8]}
+                          blahhhh
                       </Typography>
                       <Typography>
-                        {indexValue[6] && indexValue[6][9]}
+                          blahh
+
                       </Typography>
                     </CardContent>
                   </Collapse>
