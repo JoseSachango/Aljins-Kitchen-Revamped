@@ -115,110 +115,161 @@ const Mainpage = () => {
 
   //---
 
-  const [ingredients, setIngredients] = useState([]);
+  //const [ingredients, setIngredients] = useState([]);
   const inputRef = useRef();
   // const newlist = list.map(item => item)
   const iduser = userData.userId;
 
   //Explain how we're using inputRef with the textfield
 
-  function pantryList() {
-    if (isAuthenticated) {
-      axios
-        .get("/api/pantry/" + user.sub)
-        .then((result) => {
-          setList(result.data[0].ingredients);
-        })
-        .catch(console.log);
-    }
-  }
+        //---- Hanan and Jin's work
+        function pantryList() {
 
-  useEffect(() => {
-    pantryList();
-  }, [isAuthenticated]);
+          if (isAuthenticated) {
+            axios
+              .get("/api/pantry/" + user.sub)
+              .then((result) => {
+                  console.log("This is the result from the get request to the endpoint with the usersId:",result.data)
+                setList(result.data.ingredients);
+              })
+              .catch(err=>{
+                  console.log("There was an error with the get request to the endpoint with the userId: ",err)});
+          }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newArr = [...ingredients, inputRef.current.value];
-    console.log(newArr);
-    setIngredients(newArr); //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
+      }
 
-    console.log("This is the current list: ", ingredients);
-    console.log(
-      "This is the current value in the input field: ",
-      inputRef.current.value
-    );
-    inputRef.current.value = "";
-  };
+
+      useEffect(() => {
+          pantryList();
+      }, [isAuthenticated])
+      //-----
+
+
+  const handleSubmit = (event)=> {
+    event.preventDefault()
+    setList([...list, inputRef.current.value]) //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
+    //console.log("This is the current list: ",list)
+    //console.log("This is the current value in the input field: ",inputRef.current.value)
+    inputRef.current.value = ""
+}
 
   //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
 
   // useEffect(() => {
 
-  function postRequest() {
-    console.log("Ths value of iduser is :", userData.userId);
+    function postRequest(){
+            
+      //console.log("Ths value of iduser is :", iduser)
 
-    axios
-      .post("/api/pantry", { userId: user.sub, ingredients: list })
-      .then((result) => {
-        //if post request is successful make a axios get request to the tasty api here
-        pantryList();
-        setReturnedPostData({ result });
-        console.log(
-          "This is the data we get back from making a post request: ",
-          result
-        );
-      })
-      .catch((err) => {
-        console.log("There was an error with the post request: ", err);
-      });
+      //Do a get request to see if there is a user in the database with a specfific user id. if there is then perform an update. if there isn't then perform a post request
+      
+   
+
+          axios.get("/api/pantry/"+user.sub).then(result=>{
+
+              if(result.data.userId){
+                  console.log("This is the value of user.sub before it is sent via put request: ",user.sub)
+                  console.log("This is the value of list before it is sent via the put request: ",list)
+                  axios.put("/api/pantry/"+user.sub,{ingredients:list}).then(results=>{
+                      console.log("The put request was successfully made. We returned the value: ",results)
+                  }).catch(err=>{
+                      console.log("There was an error with the put request: ",err)
+                  })
+
+              }else if(result.data.userId===false){
+
+                  console.log("Result from the get request is false ")
+                  
+
+              }
+
+          }).catch(err=>{
+
+              console.log("There was an error with the get request using the userId: ",err)
+              console.log("This is the value of user.sub when the get request return an error: ",user.sub)
+              console.log("This is the value of list when the get request returns an error: ",list)
+              axios.post("/api/pantry",{userId:user.sub,ingredients:list}).then(result=>{
+              
+                  //if post request is successful make a axios get request to the tasty api here
+
+                  //setReturnedPostData({result})
+                  console.log("This is the data we get back from making a post request: ",result)
+              }).catch(err=>{
+                  console.log("There was an error with the post request: ",err)
+              })
+
+          })
+
+
+      
+
   }
 
   //API call here (post request)
   // return axios.post("/api/pantry",data)
   // }, [count])
 
-  console.log("Use effect was activated. The count is: ", count);
-  console.log("This is the current userData: ", userData);
+  //console.log("Use effect was activated. The count is: ", count);
+  //console.log("This is the current userData: ", userData);
 
-  const sendData = () => {
-    //console.log("These are the filtered recipes: ",newRecipes)
+  const sendData = () =>{
+
+    postRequest()
+    
+    //if isAuthenticated is true then check if registered user is 0 or 1 if it's 0 then change it to 1 if it's 1 then don't change anything. -> if it's 1 then dont post, update instead -> logic for 
+
+    
     //***********I'm not making an api call inside the useEffect hook. How will this be a problem later?*****************
-    axios
-      .get(
-        "https://tasty.p.rapidapi.com/recipes/list?rapidapi-key=de347e5db0msha96abb0356a3c81p10f425jsn336bf5c8e455"
-      )
-      .then((response) => {
-        setRecipes(response.data.results);
+   axios.get(`https://tasty.p.rapidapi.com/recipes/list?size=50&q=${list.toString()}&rapidapi-key=de347e5db0msha96abb0356a3c81p10f425jsn336bf5c8e455`).then(response=>{
 
-        console.log(
-          "This is the result from rapidapi: ",
-          response.data.results
-        );
-      })
-      .catch((err) => {
-        console.log("There as an error with the axios get request: ", err);
-      });
+            setRecipes(response.data.results)
+            //why wont this code work if I use recipes in place of response.data.results
+            /*
+            const recipesFiltered = response.data.results.filter(recipe=> {
+                //components.length===list.length && ___
+                // nest one if condition inside of another
+                filterRecipes(recipe)
+                //return recipe.sections
+            
+            })
 
-    setCount(count + 1);
-    console.log("This is the current count state: ", compileFunction);
-    setUserData({ userId: user.sub, ingredients: list });
-    console.log(
-      "This is the current users ingredients list: ",
-      userData.ingredients
-    );
+            setNewRecipes(recipesFiltered)*/
+
+            //console.log("These are the filtered recipes(newRecipes): ",recipesFiltered)
+            
+            console.log("These are the recipes unfiltered(recipes): ",recipes)
+   
+        console.log("This is the result from rapidapi: ",response.data.results)})
+        .catch(err=>{
+            console.log("There as an error with the axios get request: ",err)
+            alert("There may be something wrong with the ingredients you entered")
+        })
+    
+
+    
+
+
+    setCount(count+1)
+    //console.log("This is the current count state: ",compileFunction)
+    setUserData({userId: user.sub, ingredients: list})
+    //console.log("This is the current users ingredients list: ",userData.ingredients)
     /*
-        const userData = {
-            userId: user.sub,
-            ingredients: list
-        }*/
-  };
+    const userData = {
+        userId: user.sub,
+        ingredients: list
+    }*/
+
+}
+
+
+
+
 
   function deleteItem(id) {
-    const newArr = [...ingredients];
+    const newArr = [...list];
     newArr.splice(id, 1);
     console.log(newArr, "delete function");
-    setIngredients(newArr);
+    setList(newArr);
   }
 
   return (
@@ -241,13 +292,13 @@ const Mainpage = () => {
               />
             </form>
 
-            <Button variant="contained" color="primary" onClick={postRequest}>
+            <Button variant="contained" color="primary" onClick={sendData}>
               Finish List
             </Button>
 
             <List dense={true}>
-              {ingredients.length > 0
-                ? ingredients.map((ingredient, idx) => (
+              {list.length > 0
+                ? list.map((ingredient, idx) => (
                     <ListItem key={idx} style={{ flexDirection: "row" }}>
                       <ListItemAvatar>
                         <Avatar>
