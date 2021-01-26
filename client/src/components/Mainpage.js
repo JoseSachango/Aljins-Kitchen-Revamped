@@ -166,8 +166,6 @@ const Mainpage = () => {
     //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
 
 
-
-
     // useEffect(() => {
 
     function postRequest() {
@@ -225,8 +223,20 @@ const Mainpage = () => {
 
 
     function deleteItem(id) {
-        deleteItem(id)
-        console.log("this is a delete btn", id)
+        // event.preventDefault()
+        // console.log(this)
+        let value = list[id];
+
+        let modifiedArr = list;
+        for(var i = 0; i<list.length; i++){
+            if(modifiedArr[i] == value){
+                modifiedArr.splice(i,1);
+            }
+        }
+        setList(modifiedArr)
+        console.log(list[id])
+
+
     }
 
 
@@ -250,7 +260,7 @@ const Mainpage = () => {
                         </Button>
 
 
-                        <List dense={true} >
+                        <List dense={true}  >
                             {
                                 list.map((item, i) => <ListItem key={i} >
                                     <ListItemAvatar>
@@ -258,11 +268,11 @@ const Mainpage = () => {
                                             <FolderIcon />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText
+                                    <ListItemText style={{overflow: "hidden", textOverflow: "ellipsis", width: '11rem'}}
                                         primary={item}
 
                                     />
-                                    <ListItemSecondaryAction>
+                                    <ListItemSecondaryAction >
                                         <IconButton edge="end" aria-label="delete" onClick={() => deleteItem(i)}>
                                             <DeleteIcon />
                                         </IconButton>

@@ -14,11 +14,12 @@ module.exports = {
             .catch(err => res.status(422).json(err));
     },
 
-    findById: function(req, res) {
+    findById: function(request, response) {
         Schemas.Pantry
-            .find({userId:req.params.id})
-            .then(dbModel => res.json(dbModel))
-            .catch(err => res.status(422).json(err));
+        //maybe req.body.value 
+            .find({userId:request.params.id})
+            .then(dbModel => response.json(dbModel))
+            .catch(err => response.status(422).json(err));
         }
 }
 
