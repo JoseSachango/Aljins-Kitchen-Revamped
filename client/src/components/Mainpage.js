@@ -135,37 +135,6 @@ const Mainpage = () => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-    //----
-    /*
-      function filterRecipes(arg){
-          if(arg.sections[0].components.length===list.length){
-              const ingredientsArray = []
-              
-              arg.sections[0].components.forEach(item=>{ingredientsArray.push(item.ingredient.name)
-              console.log(ingredientsArray)})
-  
-              for(let i=0;i<list.length;i++){
-  
-                  
-  
-                      if(ingredientsArray.includes(list[i])===false){
-                          return false
-                      }else if(ingredientsArray.includes(list[i])===false){
-                          return true
-                      }
-                  
-              }
-          }
-      }
-  
-      const newRecipes = recipes.filter(recipe=> {
-          //components.length===list.length && ___
-          // nest one if condition inside of another
-          filterRecipes(recipe)
-  
-      })*/
-
-    //---
 
     //const [ingredients, setIngredients] = useState([]);
     const inputRef = useRef();
@@ -188,35 +157,21 @@ const Mainpage = () => {
                     console.log("There was an error with the get request to the endpoint with the userId: ", err)
                 });
         }
-
     }
-
 
     useEffect(() => {
         pantryList();
     }, [isAuthenticated])
-    //-----
-
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        setList([...list, inputRef.current.value]) //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
-        //console.log("This is the current list: ",list)
-        //console.log("This is the current value in the input field: ",inputRef.current.value)
+        setList([...list, inputRef.current.value]) 
         inputRef.current.value = ""
     }
 
     //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
 
-    // useEffect(() => {
-
     function postRequest() {
-
-        //console.log("Ths value of iduser is :", iduser)
-
-        //Do a get request to see if there is a user in the database with a specfific user id. if there is then perform an update. if there isn't then perform a post request
-
-
 
         axios.get("/api/pantry/" + user.sub).then(result => {
 
@@ -230,10 +185,7 @@ const Mainpage = () => {
                 })
 
             } else if (result.data.userId === false) {
-
                 console.log("Result from the get request is false ")
-
-
             }
 
         }).catch(err => {
@@ -245,49 +197,20 @@ const Mainpage = () => {
 
                 //if post request is successful make a axios get request to the tasty api here
 
-                //setReturnedPostData({result})
                 console.log("This is the data we get back from making a post request: ", result)
             }).catch(err => {
                 console.log("There was an error with the post request: ", err)
             })
-
         })
-
-
-
-    }
-
-    //API call here (post request)
-    // return axios.post("/api/pantry",data)
-    // }, [count])
-
-    //console.log("Use effect was activated. The count is: ", count);
-    //console.log("This is the current userData: ", userData);
+   }
 
     const sendData = () => {
 
         postRequest()
 
-        //if isAuthenticated is true then check if registered user is 0 or 1 if it's 0 then change it to 1 if it's 1 then don't change anything. -> if it's 1 then dont post, update instead -> logic for 
-
-
-        //***********I'm not making an api call inside the useEffect hook. How will this be a problem later?*****************
         axios.get(`https://tasty.p.rapidapi.com/recipes/list?size=50&q=${list.toString()}&rapidapi-key=de347e5db0msha96abb0356a3c81p10f425jsn336bf5c8e455`).then(response => {
 
             setRecipes(response.data.results)
-            //why wont this code work if I use recipes in place of response.data.results
-            /*
-            const recipesFiltered = response.data.results.filter(recipe=> {
-                //components.length===list.length && ___
-                // nest one if condition inside of another
-                filterRecipes(recipe)
-                //return recipe.sections
-            
-            })
-
-            setNewRecipes(recipesFiltered)*/
-
-            //console.log("These are the filtered recipes(newRecipes): ",recipesFiltered)
 
             console.log("These are the recipes unfiltered(recipes): ", recipes)
 
@@ -298,30 +221,13 @@ const Mainpage = () => {
                 alert("There may be something wrong with the ingredients you entered")
             })
 
-
-        // setRecipes(response.data.results)
-
-
-
-        setCount(count + 1)
-        //console.log("This is the current count state: ",compileFunction)
-        setUserData({ userId: user.sub, ingredients: list })
-        //console.log("This is the current users ingredients list: ",userData.ingredients)
-        /*
-        const userData = {
-            userId: user.sub,
-            ingredients: list
-        }*/
-
-        setCount(count + 1)
-        console.log("This is the current count state: ", compileFunction)
-        setUserData({ userId: user.sub, ingredients: list })
-        console.log("This is the current users ingredients list: ", userData.ingredients)
+        // setCount(count + 1)
+        // setUserData({ userId: user.sub, ingredients: list })
+        // setCount(count + 1)
+        // console.log("This is the current count state: ", compileFunction)
+        // setUserData({ userId: user.sub, ingredients: list })
+        // console.log("This is the current users ingredients list: ", userData.ingredients)
     }
-
-
-
-
 
     function deleteItem(id) {
         const newArr = [...list];
@@ -358,11 +264,6 @@ const Mainpage = () => {
                             {list.length > 0
                                 ? list.map((ingredient, idx) => (
                                     <ListItem key={idx} style={{ flexDirection: "row" }}>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FolderIcon />
-                                            </Avatar>
-                                        </ListItemAvatar>
                                         <ListItemText
                                             style={{ overflow: "hidden", textOverflow: "ellipsis", width: '11rem' }}
                                             disableTypography
