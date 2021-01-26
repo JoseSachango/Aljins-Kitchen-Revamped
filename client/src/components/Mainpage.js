@@ -12,8 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import {
     List,
     ListItem,
-    // Avatar,
-    // ListItemAvatar,
+    Avatar,
+    ListItemAvatar,
     ListItemSecondaryAction,
     IconButton,
     ListItemText,
@@ -299,7 +299,7 @@ const Mainpage = () => {
             })
 
 
-        setRecipes(response.data.results)
+        // setRecipes(response.data.results)
 
 
 
