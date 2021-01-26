@@ -27,6 +27,28 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import AddIcon from '@material-ui/icons/Add';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+
+import clsx from 'clsx';
+// import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+// import CardMedia from '@material-ui/core/CardMedia';
+// import CardContent from '@material-ui/core/CardContent';
+// import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+
+// import IconButton from '@material-ui/core/IconButton';
+// import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import InfoIcon from "@material-ui/icons/Info";
 
@@ -70,6 +92,20 @@ const useStyles = makeStyles((theme) => ({
   gridlisticon: {
     color: "rgba(255, 255, 255, 0.54)",
   },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },	      
+
 }));
 
 const Mainpage = () => {
@@ -83,6 +119,20 @@ const Mainpage = () => {
   const [userData, setUserData] = useState({});
   const [returnedPostData, setReturnedPostData] = useState({});
   const [recipes, setRecipes] = useState([]);
+  const [show, setShow] = useState(0);
+  const [indexValue,setIndexValue] =useState([])
+
+
+  useEffect(()=>{
+    setShow(indexValue[0])
+},[indexValue])
+
+
+
+  const [expanded, setExpanded] = React.useState(false);
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
   //----
   /*
     function filterRecipes(arg){
@@ -358,7 +408,7 @@ const Mainpage = () => {
                   Recommended Recipes
                 </ListSubheader>
               </GridListTile>
-              {recipes.map((recipe) => (
+              {recipes.map((recipe,i) => (
                 <GridListTile key={recipe.thumbnail_url}>
                   <img src={recipe.thumbnail_url} alt={recipe.name} />
                   <GridListTileBar
@@ -369,7 +419,10 @@ const Mainpage = () => {
                         aria-label={`info about ${recipe.name}`}
                         className={classes.icon}
                       >
-                        <InfoIcon />
+                        <AddIcon color="secondary" onClick={()=>setIndexValue([1,i,recipe.description,recipe.name,recipe.credits[0].name,recipe.thumbnail_url,recipe.instructions])} >
+                          Ingredients
+                        </AddIcon>
+
                       </IconButton>
                     }
                   />
@@ -380,7 +433,79 @@ const Mainpage = () => {
         </Grid>
 
         <Grid item xs={12} sm={3}>
-          <Paper className={classes.paper}>Pantry</Paper>
+          <Paper className={classes.paper}>
+            {show &&
+              <Card className={classes.root}>
+                  <CardHeader
+                    avatar={
+                      <Avatar aria-label="recipe" className={classes.avatar}>
+                        R
+                      </Avatar>
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={indexValue[3]}
+                    subheader={indexValue[4]}
+                  />
+                  <CardMedia
+                    className={classes.media}
+                    image={indexValue[5]}
+                    title={indexValue[3]}
+                  />
+                  <CardContent>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      {indexValue[2] && indexValue[2].split("<")[0]}
+
+                    </Typography>
+                  </CardContent>
+                  <CardActions disableSpacing>
+                    <IconButton aria-label="add to favorites">
+                      <FavoriteIcon />
+                    </IconButton>
+                    <IconButton aria-label="share">
+                      <ShareIcon />
+                    </IconButton>
+                    <IconButton
+                      className={clsx(classes.expand, {
+                        [classes.expandOpen]: expanded,
+                      })}
+                      onClick={handleExpandClick}
+                      aria-expanded={expanded}
+                      aria-label="show more"
+                    >
+                      <ExpandMoreIcon />
+                    </IconButton>
+                  </CardActions>
+                  <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+                      <Typography paragraph>Method:</Typography>
+                      <Typography paragraph>
+                        {indexValue[6] && indexValue[6][0]}
+                        {indexValue[6] && indexValue[6][1]}
+                        {indexValue[6] && indexValue[6][2]}
+                      </Typography>
+                      <Typography paragraph>
+                        {indexValue[6] && indexValue[6][3]}
+                        {indexValue[6] && indexValue[6][4]}
+                        {indexValue[6] && indexValue[6][5]}
+                      </Typography>
+                      <Typography paragraph>
+                        {indexValue[6] && indexValue[6][6]}
+                        {indexValue[6] && indexValue[6][7]}
+                        {indexValue[6] && indexValue[6][8]}
+                      </Typography>
+                      <Typography>
+                        {indexValue[6] && indexValue[6][9]}
+                      </Typography>
+                    </CardContent>
+                  </Collapse>
+              </Card>
+
+                        } 
+          </Paper>
         </Grid>
       </Grid>
     )
