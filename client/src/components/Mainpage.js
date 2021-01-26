@@ -15,6 +15,21 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+// import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+// import CardMedia from '@material-ui/core/CardMedia';
+// import CardContent from '@material-ui/core/CardContent';
+// import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+// import IconButton from '@material-ui/core/IconButton';
+// import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {
     List,
     ListItem,
@@ -22,6 +37,7 @@ import {
     // ListItemAvatar,
     ListItemSecondaryAction,
     IconButton,
+    // Button,
     ListItemText
 } from '@material-ui/core'
 
@@ -35,12 +51,6 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
-
-
-
-
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,17 +92,38 @@ const useStyles = makeStyles((theme) => ({
     gridlisticon: {
         color: 'rgba(255, 255, 255, 0.54)',
     },
-
-
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+          duration: theme.transitions.duration.shortest,
+        }),
+      },
+      expandOpen: {
+        transform: 'rotate(180deg)',
+      },
+      avatar: {
+        backgroundColor: red[500],
+      },
 
 }));
 
 
 
-
+// recipeId: recipe.id,
+//         title: recipe.name,
+//         image: recipe.thumbnail_url,
+//         instructions: recipe.instructions.display_text,
+//         video: recipe.video_url
 
 
 const Mainpage = () => {
+
+    const [expanded, setExpanded] = React.useState(false);
+
+const handleExpandClick = () => {
+  setExpanded(!expanded);
+};
 
     const { user, isAuthenticated } = useAuth0();
 
@@ -100,47 +131,19 @@ const Mainpage = () => {
 
     const [list, setList] = useState([]);
     const [count, setCount] = useState(0)
+    const [description,setDescription] =useState("")
     const [userData, setUserData] = useState({})
     const [returnedPostData, setReturnedPostData] = useState({})
     const [recipes, setRecipes] = useState([])
-    //----
-    /*
-    function filterRecipes(arg){
-        if(arg.sections[0].components.length===list.length){
-            const ingredientsArray = []
-            
-            arg.sections[0].components.forEach(item=>{ingredientsArray.push(item.ingredient.name)
-            console.log(ingredientsArray)})
-
-            for(let i=0;i<list.length;i++){
-
-                
-
-                    if(ingredientsArray.includes(list[i])===false){
-                        return false
-                    }else if(ingredientsArray.includes(list[i])===false){
-                        return true
-                    }
-                
-            }
-        }
-    }
-
-    const newRecipes = recipes.filter(recipe=> {
-        //components.length===list.length && ___
-        // nest one if condition inside of another
-        filterRecipes(recipe)
-       
-    })*/
-
-    //---
+    const [show, setShow] = useState(false);
+    // const {image, url, ingredients } = recipe.recipe;
 
 
-    const [ingredients, setIngredients] = useState([])
+    // const [ingredients, setIngredients] = useState([])
     const inputRef = useRef();
     const newlist = list.map(item => item)
     const iduser = userData.userId
-    
+
 
     //Explain how we're using inputRef with the textfield 
 
@@ -151,6 +154,29 @@ const Mainpage = () => {
         console.log("This is the current value in the input field: ", inputRef.current.value)
         inputRef.current.value = '';
     }
+
+
+   
+
+        const displayRecipe = (arg1) =>{
+            setShow(!show)
+    
+            //setDescription(arg1)
+            /*
+            axios.post("/api/recipe",{description:arg1}).then(({_id})=>{
+
+                axios.get("/api/recipe/"+_id).then(result=>{
+                    console.log("This is the result we get back from the get request: ",result)  
+                }).catch(err=> console.log("there was an error with the get request: ",err))
+
+            }).catch(err=>console.log("There was an error with the post request: ",err))*/
+    
+        }
+
+       
+
+    
+    
 
 
     //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
@@ -199,22 +225,11 @@ const Mainpage = () => {
         })
             .catch(err => { console.log("There as an error with the axios get request: ", err) })
 
-
-
-
-
         setCount(count + 1)
         console.log("This is the current count state: ", compileFunction)
         setUserData({ userId: user.sub, ingredients: list })
         console.log("This is the current users ingredients list: ", userData.ingredients)
-        /*
-        const userData = {
-            userId: user.sub,
-            ingredients: list
-        }*/
-
     }
-
 
 
     return (
@@ -273,7 +288,8 @@ const Mainpage = () => {
                                         subtitle={<span>by: {recipe.credits[0].name}</span>}
                                         actionIcon={
                                             <IconButton aria-label={`info about ${recipe.name}`} className={classes.icon}>
-                                                <AddIcon color="secondary" />
+                                            <AddIcon color="secondary" onClick={displayRecipe} >Ingredients</AddIcon>
+                                                {/* {show && <RecipeDetails ingredients={ingredients} />} */}
                                             </IconButton>
                                         }
                                     />
@@ -285,23 +301,82 @@ const Mainpage = () => {
 
                 <Grid item xs={12} sm={3}>
                     <Paper className={classes.paper}>
-                        My saved recipes
-                    <Card className={classes.root}>
-                            <CardActionArea>
-                                <CardMedia
-                                    // className={classes.media}
-                                    // image={recipe.image}
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="h2" />
-                                </CardContent>
-                            </CardActionArea>
-                            <CardActions>
-                                <Button size="small" color="primary"  >
-                                    recipe video
-        </Button >
-                            </CardActions>
-                        </Card>
+                        {show && 
+
+<Card className={classes.root}>
+<CardHeader
+  avatar={
+    <Avatar aria-label="recipe" className={classes.avatar}>
+      R
+    </Avatar>
+  }
+  action={
+    <IconButton aria-label="settings">
+      <MoreVertIcon />
+    </IconButton>
+  }
+  title="recipe name"
+  subheader="September 14, 2016"
+/>
+<CardMedia
+  className={classes.media}
+  image={recipes[0].thumbnail_url}
+  title="Paella dish"
+/>
+<CardContent>
+  <Typography variant="body2" color="textSecondary" component="p">
+    Blahhblahh
+
+  </Typography>
+</CardContent>
+<CardActions disableSpacing>
+  <IconButton aria-label="add to favorites">
+    <FavoriteIcon />
+  </IconButton>
+  <IconButton aria-label="share">
+    <ShareIcon />
+  </IconButton>
+  <IconButton
+    className={clsx(classes.expand, {
+      [classes.expandOpen]: expanded,
+    })}
+    onClick={handleExpandClick}
+    aria-expanded={expanded}
+    aria-label="show more"
+  >
+    <ExpandMoreIcon />
+  </IconButton>
+</CardActions>
+<Collapse in={expanded} timeout="auto" unmountOnExit>
+  <CardContent>
+    <Typography paragraph>Method:</Typography>
+    <Typography paragraph>
+      Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
+      minutes.
+    </Typography>
+    <Typography paragraph>
+      Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
+      heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
+      browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
+      and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
+      pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
+      saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+    </Typography>
+    <Typography paragraph>
+      Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
+      without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
+      medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
+      again without stirring, until mussels have opened and rice is just tender, 5 to 7
+      minutes more. (Discard any mussels that don’t open.)
+    </Typography>
+    <Typography>
+      Set aside off of the heat to let rest for 10 minutes, and then serve.
+    </Typography>
+  </CardContent>
+</Collapse>
+</Card>
+
+                        } 
                     </Paper>
                 </Grid>
             </Grid>
@@ -315,28 +390,7 @@ export default Mainpage
 
 
 
-const [recipes, setRecipes] = useState([])
 
-useEffect(() => {
-    getSavedRecipes()
 
-}, [])
 
-const getSavedRecipes = () => {
-    API.getSavedRecipes()
-        .then(res =>
-            setRecipes(res.data)
-        )
-        .catch(err => console.log(err));
-};
-const handleRecipeSave = id => {
-    const recipe = recipes.find(recipe => recipe.id === id);
 
-    API.saveRecipe({
-        recipeId: recipe.id,
-        title: recipe.name,
-        image: recipe.thumbnail_url,
-        instructions: recipe.instructions.display_text,
-        video: recipe.video_url
-    }).then(() => getSavedRecipes());
-};  
