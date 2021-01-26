@@ -136,6 +136,7 @@ const handleExpandClick = () => {
     const [returnedPostData, setReturnedPostData] = useState({})
     const [recipes, setRecipes] = useState([])
     const [show, setShow] = useState(false);
+    const [indexValue,setIndexValue] =useState([])
     // const {image, url, ingredients } = recipe.recipe;
 
 
@@ -156,22 +157,9 @@ const handleExpandClick = () => {
     }
 
 
-   
+        
 
-        const displayRecipe = (arg1) =>{
-            setShow(!show)
-    
-            //setDescription(arg1)
-            /*
-            axios.post("/api/recipe",{description:arg1}).then(({_id})=>{
-
-                axios.get("/api/recipe/"+_id).then(result=>{
-                    console.log("This is the result we get back from the get request: ",result)  
-                }).catch(err=> console.log("there was an error with the get request: ",err))
-
-            }).catch(err=>console.log("There was an error with the post request: ",err))*/
-    
-        }
+       
 
        
 
@@ -211,6 +199,10 @@ const handleExpandClick = () => {
 
     console.log("Use effect was activated. The count is: ", count)
     console.log("This is the current userData: ", userData)
+
+    useEffect(()=>{
+        setShow(indexValue[0])
+    },[indexValue])
 
 
     const sendData = () => {
@@ -280,7 +272,7 @@ const handleExpandClick = () => {
                             <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
                                 <ListSubheader component="div">Recommended Recipes</ListSubheader>
                             </GridListTile>
-                            {recipes.map((recipe) => (
+                            {recipes.map((recipe,i) => (
                                 <GridListTile key={recipe.thumbnail_url}>
                                     <img src={recipe.thumbnail_url} alt={recipe.name} />
                                     <GridListTileBar
@@ -288,7 +280,7 @@ const handleExpandClick = () => {
                                         subtitle={<span>by: {recipe.credits[0].name}</span>}
                                         actionIcon={
                                             <IconButton aria-label={`info about ${recipe.name}`} className={classes.icon}>
-                                            <AddIcon color="secondary" onClick={displayRecipe} >Ingredients</AddIcon>
+                                            <AddIcon color="secondary" onClick={()=>setIndexValue([!show,i,recipe.description])} >Ingredients</AddIcon>
                                                 {/* {show && <RecipeDetails ingredients={ingredients} />} */}
                                             </IconButton>
                                         }
@@ -325,7 +317,7 @@ const handleExpandClick = () => {
 />
 <CardContent>
   <Typography variant="body2" color="textSecondary" component="p">
-    Blahhblahh
+    {indexValue[2]}
 
   </Typography>
 </CardContent>
