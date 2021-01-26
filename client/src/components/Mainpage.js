@@ -30,6 +30,8 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 
 import InfoIcon from "@material-ui/icons/Info";
 
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -254,13 +256,8 @@ const Mainpage = () => {
                           <FolderIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText
-                        disableTypography
-                        primary={
-                          <Typography type="body2" style={{ flexShrink: 1 }}>
-                            {ingredient}
-                          </Typography>
-                        }
+                      <ListItemText style = {{overflow:"hidden", textOverflow:"ellipsis", width:'11rem'}}
+                        
                       />
                       <ListItemSecondaryAction>
                         <IconButton
