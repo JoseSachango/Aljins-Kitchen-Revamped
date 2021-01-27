@@ -107,6 +107,10 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
 }));
 
 const Mainpage = () => {
@@ -422,182 +426,121 @@ const Mainpage = () => {
             </Button>
             <h1>Pantry Items</h1>
 
-            <List dense={true}>
-              {list.length > 0
-                ? list.map((ingredient, idx) => (
-                    <ListItem key={idx} style={{ flexDirection: "row" }}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FolderIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          width: "11rem",
-                        }}
-                        disableTypography
-                        primary={
-                          <Typography type="body2" style={{ flexShrink: 1 }}>
-                            {ingredient}
-                          </Typography>
-                        }
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => deleteItem(idx)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))
-                : null}
-              {/* {list.length > 0
-                ? list.map((item, i) => (
-                    <ListItem key={i}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FolderIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={item} />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => deleteItem(i)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))
-                : null} */}
-            </List>
-          </Paper>
-        </Grid>
+                        <List dense={true}>
+                            {list.length > 0
+                                ? list.map((ingredient, idx) => (
+                                    <ListItem key={idx} style={{ flexDirection: "row" }}>
+                                        <ListItemText
+                                            style={{ overflow: "hidden", textOverflow: "ellipsis", width: '11rem' }}
+                                            disableTypography
+                                            primary={
+                                                <Typography type="body2" style={{ flexShrink: 1 }}>
+                                                    {ingredient}
+                                                </Typography>
+                                            }
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={() => deleteItem(idx)}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                ))
+                                : null}
+ 
+                        </List>
+                    </Paper>
+                </Grid>
 
-        <Grid item xs={12} sm={7}>
-          <Paper className={classes.paper}>
-            <GridList cellHeight={180} className={classes.gridList}>
-              <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
-                <ListSubheader component="div">
-                  Recommended Recipes
+                <Grid item xs={12} sm={7}>
+                    <Paper className={classes.paper}>
+                        <GridList cellHeight={180} className={classes.gridList}>
+                            <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
+                                <ListSubheader component="div">
+                                    Recommended Recipes
                 </ListSubheader>
-              </GridListTile>
-              {recipes.map((recipe, i) => (
-                <GridListTile key={recipe.thumbnail_url}>
-                  <img src={recipe.thumbnail_url} alt={recipe.name} />
-                  <GridListTileBar
-                    title={recipe.name}
-                    subtitle={
-                      <span>
-                        by: {recipe.user_ratings && recipe.user_ratings.score}
-                      </span>
-                    }
-                    actionIcon={
-                      <IconButton
-                        aria-label={`info about ${recipe.name}`}
-                        className={classes.icon}
-                      >
-                        {console.log(recipe.user_ratings)}
-                        <AddIcon
-                          color="secondary"
-                          onClick={() =>
-                            setIndexValue([
-                              1,
-                              i,
-                              recipe.description,
-                              recipe.name,
-                              recipe.credits[0].name,
-                              recipe.thumbnail_url,
-                              recipe.instructions,
-                            ])
-                          }
-                        >
-                          Ingredients
-                        </AddIcon>
-                      </IconButton>
-                    }
-                  />
-                </GridListTile>
-              ))}
-            </GridList>
-          </Paper>
-        </Grid>
+                            </GridListTile>
+                            {recipes.map((recipe, i) => (
+                                <GridListTile key={recipe.thumbnail_url}>
+                                    <img src={recipe.thumbnail_url} alt={recipe.name} />
+                                    <GridListTileBar
+                                        title={recipe.name}
 
-        <Grid item xs={12} sm={3}>
-          <Paper className={classes.paper}>
-            {show && (
-              <Card className={classes.root}>
-                <CardHeader
-                  avatar={
-                    <Avatar aria-label="recipe" className={classes.avatar}>
-                      R
-                    </Avatar>
-                  }
-                  action={
-                    <IconButton aria-label="settings">
-                      <MoreVertIcon />
-                    </IconButton>
-                  }
-                  title={indexValue[3]}
-                  subheader={indexValue[4]}
-                />
-                <CardMedia
-                  className={classes.media}
-                  image={indexValue[5]}
-                  title={indexValue[3]}
-                />
-                <CardContent>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {indexValue[2] && indexValue[2].split("<")[0]}
-                  </Typography>
-                </CardContent>
-                <CardActions disableSpacing>
-                  <IconButton aria-label="add to favorites">
-                    <FavoriteIcon />
-                  </IconButton>
-                  <IconButton aria-label="share">
-                    <ShareIcon />
-                  </IconButton>
-                  <IconButton
-                    className={clsx(classes.expand, {
-                      [classes.expandOpen]: expanded,
-                    })}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                  >
-                    <ExpandMoreIcon />
-                  </IconButton>
-                </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <CardContent>
-                    <Typography paragraph>Method:</Typography>
-                    <Typography paragraph>
-                      {indexValue[6] && indexValue[6][0].display_text}
-                    </Typography>
-                    <Typography paragraph>blahhhhh</Typography>
-                    <Typography paragraph>blahhhh</Typography>
-                    <Typography>blahh</Typography>
-                  </CardContent>
-                </Collapse>
-              </Card>
-            )}
-          </Paper>
-        </Grid>
-      </Grid>
-    )
-  );
+                                        actionIcon={
+                                            <IconButton
+                                                aria-label={`info about ${recipe.name}`}
+                                                className={classes.icon}
+                                            >{console.log(recipe.thumbnail_url)}
+                                                <AddIcon color="secondary" onClick={() => setIndexValue([1, i, recipe.description, recipe.name, recipe.credits[0].name, recipe.thumbnail_url, recipe.instructions])} >
+                                                    Ingredients
+                        </AddIcon>
+
+                                            </IconButton>
+                                        }
+                                    />
+                                </GridListTile>
+                            ))}
+                        </GridList>
+                    </Paper>
+                </Grid>
+
+                <Grid item xs={12} sm={3}>
+                    <Paper className={classes.paper}>
+                        {show &&
+                            <Card className={classes.root}>
+                                <CardHeader
+                                    title={indexValue[3]}
+                                    
+                                // subheader={indexValue[4]}
+                                />
+                                <CardMedia 
+                                    className={classes.media}
+                                //    image={require('./logo.jpg')}
+image={indexValue[5]}
+                                    title={indexValue[3]}
+                                />
+                                <CardContent>
+                                    <Typography variant="body2" color="textSecondary" component="p">
+                                        {indexValue[2] && indexValue[2].split("<")[0]}
+
+                                    </Typography>
+                                </CardContent>
+                                <CardActions disableSpacing>
+
+                                    <IconButton
+                                        className={clsx(classes.expand, {
+                                            [classes.expandOpen]: expanded,
+                                        })}
+                                        onClick={handleExpandClick}
+                                        aria-expanded={expanded}
+                                        aria-label="show more"
+                                    >
+                                        <ExpandMoreIcon />
+                                    </IconButton>
+                                </CardActions>
+                                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                                    <CardContent>
+                                        <Typography paragraph>Method:</Typography>
+                                        {indexValue[6].map((recipe, i) => (
+                                            <Typography paragraph>
+                                                {indexValue[6] && indexValue[6][i].display_text}
+                                            </Typography>
+                                        ))}
+
+                                    </CardContent>
+                                </Collapse>
+                            </Card>
+
+                        }
+                    </Paper>
+                </Grid>
+            </Grid>
+        )
+    );
 };
 
 export default Mainpage;
