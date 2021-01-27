@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useAuth0 } from "@auth0/auth0-react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -165,7 +165,7 @@ const Mainpage = () => {
   //---
 
   //const [ingredients, setIngredients] = useState([]);
-  const inputRef = useRef();
+ 
   // const newlist = list.map(item => item)
   const iduser = userData.userId;
 
@@ -203,12 +203,12 @@ const Mainpage = () => {
 
     setList([
       ...list,
-      event.target.firstChild.firstChild.lastChild.firstChild.value,
+    search
     ]); //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
     //console.log("This is the current list: ",list)
     //console.log("This is the current value in the input field: ",inputRef.current.value)
-    event.target.firstChild.firstChild.lastChild.firstChild.value = "";
-  };
+    setSearch("")
+  }; 
 
   //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
 
@@ -362,7 +362,7 @@ const Mainpage = () => {
         console.log(response);
         setTempIngredients([...response.data.common]);
       
-
+        
       })
       .catch((err) => {
         console.log("There as an error with the axios get request: ", err);
@@ -397,18 +397,23 @@ const Mainpage = () => {
                 label="Ingredients"
               /> */}
               <Autocomplete
+                inputValue={search}
+                // clearOnBlur={true}
+                // blurOnSelect={true}
                 clearText={"Clear"}
                 id="ingredients-search"
                 options={tempIngredients}
                 getOptionLabel={(option) => option.food_name}
-                renderInput={(params) => (
+                renderInput={(params) => {console.log(params);return(
                   <TextField
                     {...params}
-                    label="Combo box"
+                    label="Input Ingredients"
                     variant="outlined"
                     onChange={getAuto}
+                    
+
                   />
-                )}
+                )}}
               />
             </form>
 
