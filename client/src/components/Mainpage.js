@@ -165,7 +165,7 @@ const Mainpage = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        setList([...list, inputRef.current.value]) 
+        setList([...list, inputRef.current.value])
         inputRef.current.value = ""
     }
 
@@ -202,7 +202,7 @@ const Mainpage = () => {
                 console.log("There was an error with the post request: ", err)
             })
         })
-   }
+    }
 
     const sendData = () => {
 
@@ -221,12 +221,6 @@ const Mainpage = () => {
                 alert("There may be something wrong with the ingredients you entered")
             })
 
-        // setCount(count + 1)
-        // setUserData({ userId: user.sub, ingredients: list })
-        // setCount(count + 1)
-        // console.log("This is the current count state: ", compileFunction)
-        // setUserData({ userId: user.sub, ingredients: list })
-        // console.log("This is the current users ingredients list: ", userData.ingredients)
     }
 
     function deleteItem(id) {
@@ -285,27 +279,7 @@ const Mainpage = () => {
                                     </ListItem>
                                 ))
                                 : null}
-                            {/* {list.length > 0
-                ? list.map((item, i) => (
-                    <ListItem key={i}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FolderIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={item} />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => deleteItem(i)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))
-                : null} */}
+ 
                         </List>
                     </Paper>
                 </Grid>
@@ -323,12 +297,12 @@ const Mainpage = () => {
                                     <img src={recipe.thumbnail_url} alt={recipe.name} />
                                     <GridListTileBar
                                         title={recipe.name}
-                                        subtitle={<span>by: {recipe.user_ratings && recipe.user_ratings.score}</span>}
+
                                         actionIcon={
                                             <IconButton
                                                 aria-label={`info about ${recipe.name}`}
                                                 className={classes.icon}
-                                            >{console.log(recipe.user_ratings)}
+                                            >{console.log(recipe.thumbnail_url)}
                                                 <AddIcon color="secondary" onClick={() => setIndexValue([1, i, recipe.description, recipe.name, recipe.credits[0].name, recipe.thumbnail_url, recipe.instructions])} >
                                                     Ingredients
                         </AddIcon>
@@ -347,18 +321,9 @@ const Mainpage = () => {
                         {show &&
                             <Card className={classes.root}>
                                 <CardHeader
-                                    avatar={
-                                        <Avatar aria-label="recipe" className={classes.avatar}>
-                                            R
-                      </Avatar>
-                                    }
-                                    action={
-                                        <IconButton aria-label="settings">
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                    }
                                     title={indexValue[3]}
-                                    subheader={indexValue[4]}
+                                    
+                                // subheader={indexValue[4]}
                                 />
                                 <CardMedia
                                     className={classes.media}
@@ -372,12 +337,7 @@ const Mainpage = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions disableSpacing>
-                                    <IconButton aria-label="add to favorites">
-                                        <FavoriteIcon />
-                                    </IconButton>
-                                    <IconButton aria-label="share">
-                                        <ShareIcon />
-                                    </IconButton>
+
                                     <IconButton
                                         className={clsx(classes.expand, {
                                             [classes.expandOpen]: expanded,
@@ -392,19 +352,12 @@ const Mainpage = () => {
                                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                                     <CardContent>
                                         <Typography paragraph>Method:</Typography>
-                                        <Typography paragraph>
-                                            {indexValue[6] && indexValue[6][0].display_text}
-                                        </Typography>
-                                        <Typography paragraph>
-                                            blahhhhh
-                      </Typography>
-                                        <Typography paragraph>
-                                            blahhhh
-                      </Typography>
-                                        <Typography>
-                                            blahh
+                                        {indexValue[6].map((recipe, i) => (
+                                            <Typography paragraph>
+                                                {indexValue[6] && indexValue[6][i].display_text}
+                                            </Typography>
+                                        ))}
 
-                      </Typography>
                                     </CardContent>
                                 </Collapse>
                             </Card>
