@@ -293,11 +293,10 @@ const Mainpage = () => {
     //if isAuthenticated is true then check if registered user is 0 or 1 if it's 0 then change it to 1 if it's 1 then don't change anything. -> if it's 1 then dont post, update instead -> logic for
 
     //***********I'm not making an api call inside the useEffect hook. How will this be a problem later?*****************
-    axios
-      .get(
-        `https://tasty.p.rapidapi.com/recipes/list?size=50&q=${list.toString()}&rapidapi-key=de347e5db0msha96abb0356a3c81p10f425jsn336bf5c8e455`
-      )
-      .then((response) => {
+    const api_key = process.env.REACT_APP_API_KEY
+
+    axios.get(`https://tasty.p.rapidapi.com/recipes/list?size=50&q=${list.toString()}&rapidapi-key=${api_key}`).then(response => {
+    
         setRecipes(response.data.results);
         //why wont this code work if I use recipes in place of response.data.results
         /*
@@ -352,13 +351,16 @@ const Mainpage = () => {
     console.log(inputChars);
     setSearch(inputChars)
     console.log("here");
+
+    const api_key = process.env.REACT_APP_API_KEY_SEARCH
+
     axios
       .get(
         `https://trackapi.nutritionix.com/v2/search/instant?query=${inputChars}`,
         {
           headers: {
             "x-app-id": "6096e500",
-            "x-app-key": "3c2c271b19e94f3663656682d34ed4f2",
+            "x-app-key": api_key,
           },
         }
       )
@@ -451,7 +453,6 @@ const Mainpage = () => {
                                     </ListItem>
                                 ))
                                 : null}
- 
                         </List>
                     </Paper>
                 </Grid>
