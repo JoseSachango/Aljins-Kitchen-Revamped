@@ -135,37 +135,7 @@ const Mainpage = () => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-    //----
-    /*
-      function filterRecipes(arg){
-          if(arg.sections[0].components.length===list.length){
-              const ingredientsArray = []
-              
-              arg.sections[0].components.forEach(item=>{ingredientsArray.push(item.ingredient.name)
-              console.log(ingredientsArray)})
-  
-              for(let i=0;i<list.length;i++){
-  
-                  
-  
-                      if(ingredientsArray.includes(list[i])===false){
-                          return false
-                      }else if(ingredientsArray.includes(list[i])===false){
-                          return true
-                      }
-                  
-              }
-          }
-      }
-  
-      const newRecipes = recipes.filter(recipe=> {
-          //components.length===list.length && ___
-          // nest one if condition inside of another
-          filterRecipes(recipe)
-  
-      })*/
 
-    //---
 
     //const [ingredients, setIngredients] = useState([]);
     const inputRef = useRef();
@@ -254,7 +224,6 @@ const Mainpage = () => {
         })
 
 
-
     }
 
     //API call here (post request)
@@ -272,7 +241,9 @@ const Mainpage = () => {
 
 
         //***********I'm not making an api call inside the useEffect hook. How will this be a problem later?*****************
-        axios.get(`https://tasty.p.rapidapi.com/recipes/list?size=50&q=${list.toString()}&rapidapi-key=de347e5db0msha96abb0356a3c81p10f425jsn336bf5c8e455`).then(response => {
+        const api_key = process.env.REACT_APP_API_KEY
+
+        axios.get(`https://tasty.p.rapidapi.com/recipes/list?size=50&q=${list.toString()}&rapidapi-key=${api_key}`).then(response => {
 
             setRecipes(response.data.results)
             //why wont this code work if I use recipes in place of response.data.results
@@ -384,27 +355,6 @@ const Mainpage = () => {
                                     </ListItem>
                                 ))
                                 : null}
-                            {/* {list.length > 0
-                ? list.map((item, i) => (
-                    <ListItem key={i}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FolderIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={item} />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => deleteItem(i)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))
-                : null} */}
                         </List>
                     </Paper>
                 </Grid>
@@ -449,7 +399,7 @@ const Mainpage = () => {
                                     avatar={
                                         <Avatar aria-label="recipe" className={classes.avatar}>
                                             R
-                      </Avatar>
+                    </Avatar>
                                     }
                                     action={
                                         <IconButton aria-label="settings">
@@ -496,14 +446,13 @@ const Mainpage = () => {
                                         </Typography>
                                         <Typography paragraph>
                                             blahhhhh
-                      </Typography>
+                                        </Typography>
                                         <Typography paragraph>
                                             blahhhh
-                      </Typography>
+                                        </Typography>
                                         <Typography>
                                             blahh
-
-                      </Typography>
+                                    </Typography>
                                     </CardContent>
                                 </Collapse>
                             </Card>
