@@ -107,6 +107,10 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         backgroundColor: red[500],
     },
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
+      },
 
 }));
 
@@ -325,9 +329,10 @@ const Mainpage = () => {
                                     
                                 // subheader={indexValue[4]}
                                 />
-                                <CardMedia
+                                <CardMedia 
                                     className={classes.media}
-                                    image={indexValue[5]}
+                                //    image={require('./logo.jpg')}
+image={indexValue[5]}
                                     title={indexValue[3]}
                                 />
                                 <CardContent>
