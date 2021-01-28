@@ -526,12 +526,17 @@ image={indexValue[5]}
                                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                                     <CardContent>
                                         <Typography paragraph>Method:</Typography>
-                                        {indexValue[6].map((recipe, i) => (
+                                        
                                             <Typography paragraph>
-                                                {indexValue[6] && indexValue[6][i].display_text}
-                                            </Typography>
-                                        ))}
+                                   
+                                            {Array.isArray(indexValue[6]) && 
+                                          
+                                             indexValue[6].map((recipe, i) => ( 
+                                              indexValue[6] && indexValue[6][i].display_text
+                                            ))}
 
+                                            </Typography>
+                                        
                                     </CardContent>
                                 </Collapse>
                             </Card>
