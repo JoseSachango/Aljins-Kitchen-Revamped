@@ -169,7 +169,7 @@ const Mainpage = () => {
   //---
 
   //const [ingredients, setIngredients] = useState([]);
- 
+
   // const newlist = list.map(item => item)
   const iduser = userData.userId;
 
@@ -207,12 +207,12 @@ const Mainpage = () => {
 
     setList([
       ...list,
-    search
+      search
     ]); //Does this syntax mean you're pushing inputRef.current.value onto an array? How is that differnt than merging?Is this a controlled variable
     //console.log("This is the current list: ",list)
     //console.log("This is the current value in the input field: ",inputRef.current.value)
     setSearch("")
-  }; 
+  };
 
   //When a user signs in and is not in the database use a post request to add his id to the database. If the user is already in the database don't do anything
 
@@ -296,29 +296,29 @@ const Mainpage = () => {
     const api_key = process.env.REACT_APP_API_KEY
 
     axios.get(`https://tasty.p.rapidapi.com/recipes/list?size=50&q=${list.toString()}&rapidapi-key=${api_key}`).then(response => {
-    
-        setRecipes(response.data.results);
-        //why wont this code work if I use recipes in place of response.data.results
-        /*
-            const recipesFiltered = response.data.results.filter(recipe=> {
-                //components.length===list.length && ___
-                // nest one if condition inside of another
-                filterRecipes(recipe)
-                //return recipe.sections
-            
-            })
 
-            setNewRecipes(recipesFiltered)*/
+      setRecipes(response.data.results);
+      //why wont this code work if I use recipes in place of response.data.results
+      /*
+          const recipesFiltered = response.data.results.filter(recipe=> {
+              //components.length===list.length && ___
+              // nest one if condition inside of another
+              filterRecipes(recipe)
+              //return recipe.sections
+          
+          })
 
-        //console.log("These are the filtered recipes(newRecipes): ",recipesFiltered)
+          setNewRecipes(recipesFiltered)*/
 
-        console.log("These are the recipes unfiltered(recipes): ", recipes);
+      //console.log("These are the filtered recipes(newRecipes): ",recipesFiltered)
 
-        console.log(
-          "This is the result from rapidapi: ",
-          response.data.results
-        );
-      })
+      console.log("These are the recipes unfiltered(recipes): ", recipes);
+
+      console.log(
+        "This is the result from rapidapi: ",
+        response.data.results
+      );
+    })
       .catch((err) => {
         console.log("There as an error with the axios get request: ", err);
         alert("There may be something wrong with the ingredients you entered");
@@ -367,8 +367,8 @@ const Mainpage = () => {
       .then((response) => {
         console.log(response);
         setTempIngredients([...response.data.common]);
-      
-        
+
+
       })
       .catch((err) => {
         console.log("There as an error with the axios get request: ", err);
@@ -410,16 +410,18 @@ const Mainpage = () => {
                 id="ingredients-search"
                 options={tempIngredients}
                 getOptionLabel={(option) => option.food_name}
-                renderInput={(params) => {console.log(params);return(
-                  <TextField
-                    {...params}
-                    label="Input Ingredients"
-                    variant="outlined"
-                    onChange={getAuto}
-                    
+                renderInput={(params) => {
+                  console.log(params); return (
+                    <TextField
+                      {...params}
+                      label="Input Ingredients"
+                      variant="outlined"
+                      onChange={getAuto}
 
-                  />
-                )}}
+
+                    />
+                  )
+                }}
               />
             </form>
 
@@ -428,125 +430,122 @@ const Mainpage = () => {
             </Button>
             <h1>Pantry Items</h1>
 
-                        <List dense={true}>
-                            {list.length > 0
-                                ? list.map((ingredient, idx) => (
-                                    <ListItem key={idx} style={{ flexDirection: "row" }}>
-                                        <ListItemText
-                                            style={{ overflow: "hidden", textOverflow: "ellipsis", width: '11rem' }}
-                                            disableTypography
-                                            primary={
-                                                <Typography type="body2" style={{ flexShrink: 1 }}>
-                                                    {ingredient}
-                                                </Typography>
-                                            }
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={() => deleteItem(idx)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                ))
-                                : null}
-                        </List>
-                    </Paper>
-                </Grid>
+            <List dense={true}>
+              {list.length > 0
+                ? list.map((ingredient, idx) => (
+                  <ListItem key={idx} style={{ flexDirection: "row" }}>
+                    <ListItemText
+                      style={{ overflow: "hidden", textOverflow: "ellipsis", width: '11rem' }}
+                      disableTypography
+                      primary={
+                        <Typography type="body2" style={{ flexShrink: 1 }}>
+                          {ingredient}
+                        </Typography>
+                      }
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => deleteItem(idx)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))
+                : null}
+            </List>
+          </Paper>
+        </Grid>
 
-                <Grid item xs={12} sm={7}>
-                    <Paper className={classes.paper}>
-                        <GridList cellHeight={180} className={classes.gridList}>
-                            <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
-                                <ListSubheader component="div">
-                                    Recommended Recipes
+        <Grid item xs={12} sm={7}>
+          <Paper className={classes.paper}>
+            <GridList cellHeight={180} className={classes.gridList}>
+              <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
+                <ListSubheader component="div">
+                  Recommended Recipes
                 </ListSubheader>
-                            </GridListTile>
-                            {recipes.map((recipe, i) => (
-                                <GridListTile key={recipe.thumbnail_url}>
-                                    <img src={recipe.thumbnail_url} alt={recipe.name} />
-                                    <GridListTileBar
-                                        title={recipe.name}
+              </GridListTile>
+              {recipes.map((recipe, i) => (
+                <GridListTile key={recipe.thumbnail_url}>
+                  <img src={recipe.thumbnail_url} alt={recipe.name} />
+                  <GridListTileBar
+                    title={recipe.name}
 
-                                        actionIcon={
-                                            <IconButton
-                                                aria-label={`info about ${recipe.name}`}
-                                                className={classes.icon}
-                                            >{console.log(recipe.thumbnail_url)}
-                                                <AddIcon color="secondary" onClick={() => setIndexValue([1, i, recipe.description, recipe.name, recipe.credits[0].name, recipe.thumbnail_url, recipe.instructions])} >
-                                                    Ingredients
+                    actionIcon={
+                      <IconButton
+                        aria-label={`info about ${recipe.name}`}
+                        className={classes.icon}
+                      >{console.log(recipe.thumbnail_url)}
+                        <AddIcon color="secondary" onClick={() => setIndexValue([1, i, recipe.description, recipe.name, recipe.credits[0].name, recipe.thumbnail_url, recipe.instructions])} >
+                          Ingredients
                         </AddIcon>
 
-                                            </IconButton>
-                                        }
-                                    />
-                                </GridListTile>
-                            ))}
-                        </GridList>
-                    </Paper>
-                </Grid>
+                      </IconButton>
+                    }
+                  />
+                </GridListTile>
+              ))}
+            </GridList>
+          </Paper>
+        </Grid>
 
-                <Grid item xs={12} sm={3}>
-                    <Paper className={classes.paper}>
-                        {show &&
-                            <Card className={classes.root}>
-                                <CardHeader
-                                    title={indexValue[3]}
-                                    
-                                // subheader={indexValue[4]}
-                                />
-                                <CardMedia 
-                                    className={classes.media}
-                                //    image={require('./logo.jpg')}
-image={indexValue[5]}
-                                    title={indexValue[3]}
-                                />
-                                <CardContent>
-                                    <Typography variant="body2" color="textSecondary" component="p">
-                                        {indexValue[2] && indexValue[2].split("<")[0]}
+        <Grid item xs={12} sm={3}>
+          <Paper className={classes.paper}>
+            {show &&
+              <Card className={classes.root}>
+                <CardHeader
+                  title={indexValue[3]}
+                />
+                <CardMedia
+                  className={classes.media}
+                  image={indexValue[5]}
+                  title={indexValue[3]}
+                />
+                <CardContent>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                    {indexValue[2] && indexValue[2].split("<")[0]}
 
-                                    </Typography>
-                                </CardContent>
-                                <CardActions disableSpacing>
+                  </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
 
-                                    <IconButton
-                                        className={clsx(classes.expand, {
-                                            [classes.expandOpen]: expanded,
-                                        })}
-                                        onClick={handleExpandClick}
-                                        aria-expanded={expanded}
-                                        aria-label="show more"
-                                    >
-                                        <ExpandMoreIcon />
-                                    </IconButton>
-                                </CardActions>
-                                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                                    <CardContent>
-                                        <Typography paragraph>Method:</Typography>
-                                        
-                                            <Typography paragraph>
-                                   
-                                            {Array.isArray(indexValue[6]) && 
-                                          
-                                             indexValue[6].map((recipe, i) => ( 
-                                              indexValue[6] && indexValue[6][i].display_text
-                                            ))}
+                  <IconButton
+                    className={clsx(classes.expand, {
+                      [classes.expandOpen]: expanded,
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <CardContent>
+                    <Typography paragraph>Method:</Typography>
 
-                                            </Typography>
-                                        
-                                    </CardContent>
-                                </Collapse>
-                            </Card>
+                    <Typography paragraph>
 
-                        }
-                    </Paper>
-                </Grid>
-            </Grid>
-        )
-    );
+                      {Array.isArray(indexValue[6]) &&
+
+                        indexValue[6].map((recipe, i) => (
+                          indexValue[6] && indexValue[6][i].display_text
+                        ))}
+
+                    </Typography>
+
+                  </CardContent>
+                </Collapse>
+              </Card>
+
+            }
+          </Paper>
+        </Grid>
+      </Grid>
+    )
+  );
 };
 
 export default Mainpage;
