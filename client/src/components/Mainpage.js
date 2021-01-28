@@ -500,8 +500,7 @@ const Mainpage = () => {
                                 />
                                 <CardMedia 
                                     className={classes.media}
-                                //    image={require('./logo.jpg')}
-image={indexValue[5]}
+                                    image={indexValue[5]}
                                     title={indexValue[3]}
                                 />
                                 <CardContent>
