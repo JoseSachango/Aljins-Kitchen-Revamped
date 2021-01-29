@@ -4,7 +4,7 @@ const Schemas = require( "../models")
 
 module.exports = {
     create: function(request,response){
-       Schemas.Pantry.create(request.body).then(result=>response.json(result)).catch(err=>response.json(err))
+        Schemas.Pantry.create(request.body).then(result=>response.json(result)).catch(err=>response.json(err))
     },
     getOne: function(request,response) {
         console.log("The getOne function is firing")
@@ -27,7 +27,7 @@ module.exports = {
             {
                 $set: {ingredients: request.body.ingredients}
             },
-           
+        
         ).then(result=>{
             response.json(result)
         }).catch(err=>{
